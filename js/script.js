@@ -76,3 +76,57 @@ loadTheme();
 if (themeButton) {
     themeButton.addEventListener("click", toggleTheme);
 }
+const skills = [
+    { name: "Graphic Design", category: "Creative", level: "Competent" },
+    { name: "Digital Illustration", category: "Creative", level: "Competent" },
+    { name: "Video Editing", category: "Creative", level: "Proficient" },
+    { name: "Creative Direction", category: "Creative", level: "Proficient" },
+    { name: "Content Creation", category: "Creative", level: "Competent" },
+    { name: "3D Modeling", category: "Creative", level: "Beginner" },
+    { name: "2D Animation", category: "Creative", level: "Beginner" },
+    { name: "C+", category: "Technical", level: "Beginner" },
+    { name: "HTML", category: "Technical", level: "Beginner" }
+];
+
+// Keep the skills in one list so updates do not require editing HTML rows.
+function renderSkills() {
+    const skillsList = document.getElementById("skills-list");
+
+    if (!skillsList) {
+        return;
+    }
+
+    skillsList.replaceChildren();
+
+    const validSkills = skills.filter(function hasName(skill) {
+        return skill.name.trim() !== "";
+    });
+
+    if (validSkills.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 3;
+        cell.textContent = "No skills to display.";
+        row.appendChild(cell);
+        skillsList.appendChild(row);
+        return;
+    }
+
+    // Give each listed skill its own row in the existing table.
+    validSkills.forEach(function addSkillRow(skill) {
+        const row = document.createElement("tr");
+        const nameCell = document.createElement("td");
+        const categoryCell = document.createElement("td");
+        const levelCell = document.createElement("td");
+
+        nameCell.textContent = skill.name;
+        categoryCell.textContent = skill.category;
+        levelCell.textContent = skill.level;
+
+        row.append(nameCell, categoryCell, levelCell);
+        skillsList.appendChild(row);
+    });
+}
+
+renderSkills();
