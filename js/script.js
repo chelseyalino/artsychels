@@ -30,3 +30,49 @@ if (menuButton && navigation) {
     menuButton.classList.add("is-ready");
     navigation.classList.add("menu-ready");
 }
+const themeButton = document.getElementById("theme-toggle");
+
+// Keep the colors and button label matched to the chosen theme.
+function applyTheme(isDark) {
+    document.body.classList.toggle("dark-mode", isDark);
+
+    if (themeButton) {
+        themeButton.textContent = isDark
+            ? "Switch to light mode"
+            : "Switch to dark mode";
+    }
+}
+
+// Remember the user's choice when browser storage is available.
+function toggleTheme() {
+    const isDark = !document.body.classList.contains("dark-mode");
+    applyTheme(isDark);
+
+    try {
+        localStorage.setItem("portfolio-theme", isDark ? "dark" : "light");
+    } catch {
+        // Theme switching still works if storage is unavailable.
+    }
+}
+
+// Restore the saved choice without stopping other features if storage fails.
+function loadTheme() {
+    try {
+        const savedTheme = localStorage.getItem("portfolio-theme");
+
+        if (savedTheme === "dark" || savedTheme === "light") {
+            applyTheme(savedTheme === "dark");
+            return;
+        }
+    } catch {
+        // Use the current page theme if storage is unavailable.
+    }
+
+    applyTheme(document.body.classList.contains("dark-mode"));
+}
+
+loadTheme();
+
+if (themeButton) {
+    themeButton.addEventListener("click", toggleTheme);
+}
