@@ -130,3 +130,72 @@ function renderSkills() {
 }
 
 renderSkills();
+const contactForm = document.getElementById("contact-form");
+
+// Give each field its own feedback so users know what to correct.
+function showFieldError(field, message) {
+    const error = document.getElementById(field.id + "-error");
+
+    error.textContent = message;
+    field.setAttribute("aria-invalid", String(message !== ""));
+}
+
+// Check every field before showing success and keep the user's entries.
+function validateContactForm(event) {
+    event.preventDefault();
+
+    const nameField = document.getElementById("name");
+    const emailField = document.getElementById("email");
+    const subjectField = document.getElementById("subject");
+    const messageField = document.getElementById("message");
+    const status = document.getElementById("form-status");
+
+    status.textContent = "";
+
+    const name = nameField.value.trim();
+    const email = emailField.value.trim();
+    const subject = subjectField.value.trim();
+    const message = messageField.value.trim();
+
+    let emailError = "";
+
+    if (email === "") {
+        emailError = "Please enter your email address.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        emailError = "Please enter an email like name@example.com.";
+    }
+
+    showFieldError(
+        nameField,
+        name === "" ? "Please enter your name." : ""
+    );
+
+    showFieldError(emailField, emailError);
+
+    showFieldError(
+        subjectField,
+        subject === "" ? "Please enter a subject." : ""
+    );
+
+    showFieldError(
+        messageField,
+        message === "" ? "Please enter a message." : ""
+    );
+
+    const firstInvalid = contactForm.querySelector(
+        '[aria-invalid="true"]'
+    );
+
+    if (firstInvalid) {
+        firstInvalid.focus();
+        return;
+    }
+
+    status.textContent =
+        "Form checked successfully. No message has been sent.";
+}
+
+if (contactForm) {
+    contactForm.addEventListener("submit", validateContactForm);
+    contactForm.noValidate = true;
+}
