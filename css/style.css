@@ -386,3 +386,33 @@ footer p {
         grid-template-columns: 1fr;
     }
 }
+#menu-toggle {
+    display: none;
+}
+
+@media (max-width: 700px) {
+    #menu-toggle.is-ready {
+        display: block;
+        margin: var(--space-medium) auto 0;
+        padding: 10px 18px;
+        font: inherit;
+        color: var(--dark-brown);
+        background-color: var(--white);
+        border: 2px solid var(--brown);
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    #menu-toggle:focus-visible {
+        outline: 3px solid var(--brown);
+        outline-offset: 3px;
+    }
+
+    #main-nav.menu-ready {
+        display: none;
+    }
+
+    #main-nav.menu-ready.is-open {
+        display: flex;
+    }
+}
