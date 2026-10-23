@@ -416,3 +416,53 @@ footer p {
         display: flex;
     }
 }
+/* Colors for dark mode */
+body.dark-mode {
+    color: #f8eef0;
+    background-color: #211c20;
+}
+
+body.dark-mode header,
+body.dark-mode footer {
+    background-color: #343c2c;
+    color: #f8eef0;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3 {
+    color: #f3c6cf;
+}
+
+body.dark-mode article,
+body.dark-mode .card,
+body.dark-mode nav {
+    background-color: #342c32;
+    color: #f8eef0;
+}
+
+body.dark-mode .contact-card {
+    background-color: #342c32;
+}
+
+body.dark-mode .skills-card th {
+    background-color: #343c2c;
+    color: #f8eef0;
+}
+
+/* Theme button */
+#theme-toggle {
+    margin-top: var(--space-small);
+    padding: 8px 14px;
+    font: inherit;
+    color: var(--dark-brown);
+    background-color: var(--pink);
+    border: 2px solid var(--brown);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#theme-toggle:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+}
