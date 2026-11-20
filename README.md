@@ -1,75 +1,101 @@
-ArtsyChels — Personal Art Portfolio
-1. Project Title
+# ArtsyChels — Personal Art Portfolio
+
+## 1. Project Title
+
 ArtsyChels: Personal Art Portfolio by Ane Chelsey Alino
 
-2. Overview
-ArtsyChels is a personal art portfolio created by Ane Chelsey Alino, a 20-year-old Multimedia Arts student at FEU Institute of Technology.
+## 2. Overview
 
-This website introduces who I am, my creative interests, hobbies, and passion for the arts. It also features my small business, add2kart, where I sell fun and original stickers and accept art commissions.
+ArtsyChels is a personal art portfolio website created by Ane Chelsey Alino, a Multimedia Arts student at FEU Institute of Technology.
 
-I enjoy traditional art, watercolor painting, drawing, crafting, sewing, and collecting whimsical items such as miniatures and trinkets. Among my many interests, filmmaking is my greatest passion.
+The website introduces my background, creative interests, hobbies, and passion for the arts. It also features my small business, add2kart, which sells original stickers and accepts art commissions.
 
-Through ArtsyChels, I share my creativity, personality, and love for artistic expression.
+My interests include traditional art, watercolor painting, drawing, crafting, sewing, miniatures, and collecting whimsical items. Filmmaking is my greatest creative passion.
 
-3. Features
-Personal introduction and artist background.
-Information about my creative interests and hobbies.
-Showcase of my artistic personality.
-Introduction to my small business, add2kart.
-Social media links for my business.
-Responsive website layout for mobile, tablet, and desktop screens.
-Interactive website elements using JavaScript.
-Visually appealing design that reflects my artistic personality.
-4. Technologies
-The website was developed using:
+Through ArtsyChels, I share my creativity, personality, and artistic work.
 
-HTML5 – Used to create the structure and content of the website.
-CSS3 – Used to design the website's appearance, colors, typography, and layout.
-JavaScript – Used to add interactive functionality to the website.
-5. Setup
+## 3. Features
+
+- Personal introduction and artist background
+- Information about my creative interests and hobbies
+- Responsive layout for mobile, tablet, and desktop screens
+- Navigation menu toggle using JavaScript
+- Dark and light mode toggle
+- Dark-mode preference saved using Local Storage
+- Dynamic skills table generated from an array of objects
+- Contact-form validation with specific error messages
+- Success message after valid form submission
+- Corrupt Local Storage fallback using default settings
+- Social media links for add2kart
+- Visual design reflecting my artistic personality
+
+## 4. Technologies
+
+- HTML5 — Creates the structure and content of the website
+- CSS3 — Controls the layout, colors, typography, responsiveness, and appearance
+- JavaScript — Adds the interactive features and form validation
+- Local Storage — Saves the visitor’s theme preference and name as JSON
+- InfinityFree — Hosts the live website
+- Git and GitHub — Stores and manages the project files
+
+## 5. Setup
+
 To view the website locally:
 
-Visit the GitHub repository.
-Download the ArtsyChels project folder by selecting Code → Download ZIP.
-Extract the downloaded ZIP file.
-Open the extracted project folder.
-Locate the index.html file.
-Double-click index.html to open it in a web browser.
-Make sure all CSS, JavaScript, and image files remain in their correct folders.
-No PHP or database setup is required.
+1. Visit the GitHub repository.
+2. Select **Code → Download ZIP**.
+3. Extract the downloaded ZIP file.
+4. Open the extracted project folder.
+5. Locate `index.html`.
+6. Open `index.html` in a web browser.
+7. Keep the CSS, JavaScript, image, and asset folders in their original locations.
 
-6. Live Demo URL
-Visit the live website:
+No PHP, server-side code, or database setup is required.
+
+## 6. Live Demo and Repository
+
+Live Demo:
 
 https://artsychels.ifree.page
-
-The website is hosted using InfinityFree.
 
 GitHub Repository:
 
 https://github.com/chelseyalino/artsychels
 
-7. Screenshots
-Screenshots of the website demonstrate its appearance and responsive layout across different screen sizes. (folder name/screenshots)
+## 7. Screenshots
 
-Device	Viewport Size
-Mobile	375 × 667 pixels
-Tablet	768 × 1024 pixels
-Desktop	1366 × 768 pixels
-The screenshots showcase the website's layout, content, and responsiveness across mobile, tablet, and desktop devices.
+Screenshots are stored in:
 
-8. Credits
+```text
+assets/screens/
+
+## 8. Testing
+
+The website was tested by:
+
+- Opening and closing the navigation menu
+- Closing the menu with the Escape key
+- Switching between dark and light mode
+- Refreshing the page to confirm that the theme preference is saved
+- Checking the dynamic skills table
+- Submitting the contact form with blank fields
+- Submitting the contact form with spaces only
+- Testing an invalid email address
+- Testing a valid form submission
+- Corrupting the Local Storage value and reloading the page
+- Checking mobile, tablet, and desktop viewport sizes
+- Checking the live website after deployment
+
+The contact form is a demonstration form and does not send an actual message.
+
+##9. Credits
+
 Created by: Ane Chelsey Alino
-
 School: FEU Institute of Technology
-
 Small Business: add2kart
+Social Media:
+- Facebook: add2kart
+- Instagram: @add2kart.official
+- TikTok: @add2kart.official
 
-Social Media Accounts:
-
-Facebook: add2kart
-Instagram: @add2kart.official
-TikTok: @add2kart.official
 Hosting Provider: InfinityFree
-
-GitHub Repository: ArtsyChels
