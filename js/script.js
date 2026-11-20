@@ -1,81 +1,61 @@
-// Keep the menu's appearance and accessibility state in sync.
-function setMenuOpen(isOpen) {
-    navigation.classList.toggle("is-open", isOpen);
-    menuButton.setAttribute("aria-expanded", String(isOpen));
-}
+const settingsKey = "portfolioSettings";
 
-// Let users open and close the menu with the same button.
-function toggleMenu() {
-    const isOpen = navigation.classList.contains("is-open");
-    setMenuOpen(!isOpen);
-}
+const defaultSettings = {
+    theme: "light",
+    visitorName: "",
+    lastVisit: ""
+};
 
-// Let keyboard users close the menu and return to its button.
-function handleMenuKey(event) {
-    if (event.key === "Escape" &&
-        navigation.classList.contains("is-open")) {
-        setMenuOpen(false);
-        menuButton.focus();
-    }
-}
+let settings = { ...defaultSettings };
 
-const menuButton = document.getElementById("menu-toggle");
-const navigation = document.getElementById("main-nav");
+try {
+    const savedSettings = localStorage.getItem(settingsKey);
 
-if (menuButton && navigation) {
-    menuButton.addEventListener("click", toggleMenu);
-    document.addEventListener("keydown", handleMenuKey);
+    if (savedSettings) {
+        const storedSettings = JSON.parse(savedSettings);
 
-    setMenuOpen(false);
-    menuButton.classList.add("is-ready");
-    navigation.classList.add("menu-ready");
-}
-const themeButton = document.getElementById("theme-toggle");
-
-// Keep the colors and button label matched to the chosen theme.
-function applyTheme(isDark) {
-    document.body.classList.toggle("dark-mode", isDark);
-
-    if (themeButton) {
-        themeButton.textContent = isDark
-            ? "Switch to light mode"
-            : "Switch to dark mode";
-    }
-}
-
-// Remember the user's choice when browser storage is available.
-function toggleTheme() {
-    const isDark = !document.body.classList.contains("dark-mode");
-    applyTheme(isDark);
-
-    try {
-        localStorage.setItem("portfolio-theme", isDark ? "dark" : "light");
-    } catch {
-        // Theme switching still works if storage is unavailable.
-    }
-}
-
-// Restore the saved choice without stopping other features if storage fails.
-function loadTheme() {
-    try {
-        const savedTheme = localStorage.getItem("portfolio-theme");
-
-        if (savedTheme === "dark" || savedTheme === "light") {
-            applyTheme(savedTheme === "dark");
-            return;
+        if (
+            !storedSettings ||
+            typeof storedSettings !== "object" ||
+            Array.isArray(storedSettings)
+        ) {
+            throw new Error("Invalid settings object.");
         }
-    } catch {
-        // Use the current page theme if storage is unavailable.
+
+        settings = {
+            theme: storedSettings.theme === "dark" ? "dark" : "light",
+            visitorName:
+                typeof storedSettings.visitorName === "string"
+                    ? storedSettings.visitorName
+                    : "",
+            lastVisit:
+                typeof storedSettings.lastVisit === "string" &&
+                Number.isFinite(Date.parse(storedSettings.lastVisit))
+                    ? storedSettings.lastVisit
+                    : ""
+        };
     }
-
-    applyTheme(document.body.classList.contains("dark-mode"));
+} catch (error) {
+    console.warn("Could not restore settings. Using defaults.", error);
+    settings = { ...defaultSettings };
 }
 
-loadTheme();
-
-if (themeButton) {
-    themeButton.addEventListener("click", toggleTheme);
+function saveSettings() {
+    try {
+        localStorage.setItem(settingsKey, JSON.stringify(settings));
+    } catch (error) {
+        console.warn("Could not save settings.", error);
+    }
 }
+
+document.documentElement.classList.toggle(
+    "dark-mode",
+    settings.theme === "dark"
+);
+
+settings.lastVisit = new Date().toISOString();
+saveSettings();
+
 const skills = [
     { name: "Graphic Design", category: "Creative", level: "Competent" },
     { name: "Digital Illustration", category: "Creative", level: "Competent" },
@@ -88,114 +68,157 @@ const skills = [
     { name: "HTML", category: "Technical", level: "Beginner" }
 ];
 
-// Keep the skills in one list so updates do not require editing HTML rows.
-function renderSkills() {
+document.addEventListener("DOMContentLoaded", function () {
+    const menuButton = document.getElementById("menu-toggle");
+    const navigation = document.getElementById("main-nav");
+    const themeButton = document.getElementById("theme-toggle");
     const skillsList = document.getElementById("skills-list");
+    const contactForm = document.getElementById("contact-form");
 
-    if (!skillsList) {
-        return;
+    if (menuButton && navigation) {
+        function setMenuOpen(isOpen) {
+            navigation.classList.toggle("is-open", isOpen);
+            menuButton.setAttribute("aria-expanded", String(isOpen));
+        }
+
+        menuButton.addEventListener("click", function () {
+            const isOpen = navigation.classList.contains("is-open");
+            setMenuOpen(!isOpen);
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && navigation.classList.contains("is-open")) {
+                setMenuOpen(false);
+                menuButton.focus();
+            }
+        });
+
+        setMenuOpen(false);
+        menuButton.classList.add("is-ready");
+        navigation.classList.add("menu-ready");
     }
 
-    skillsList.replaceChildren();
+    function applyTheme(isDark) {
+        document.documentElement.classList.toggle("dark-mode", isDark);
 
-    const validSkills = skills.filter(function hasName(skill) {
-        return skill.name.trim() !== "";
-    });
-
-    if (validSkills.length === 0) {
-        const row = document.createElement("tr");
-        const cell = document.createElement("td");
-
-        cell.colSpan = 3;
-        cell.textContent = "No skills to display.";
-        row.appendChild(cell);
-        skillsList.appendChild(row);
-        return;
+        if (themeButton) {
+            themeButton.textContent = isDark
+                ? "Switch to light mode"
+                : "Switch to dark mode";
+        }
     }
 
-    // Give each listed skill its own row in the existing table.
-    validSkills.forEach(function addSkillRow(skill) {
-        const row = document.createElement("tr");
-        const nameCell = document.createElement("td");
-        const categoryCell = document.createElement("td");
-        const levelCell = document.createElement("td");
+    applyTheme(settings.theme === "dark");
 
-        nameCell.textContent = skill.name;
-        categoryCell.textContent = skill.category;
-        levelCell.textContent = skill.level;
-
-        row.append(nameCell, categoryCell, levelCell);
-        skillsList.appendChild(row);
-    });
-}
-
-renderSkills();
-const contactForm = document.getElementById("contact-form");
-
-// Give each field its own feedback so users know what to correct.
-function showFieldError(field, message) {
-    const error = document.getElementById(field.id + "-error");
-
-    error.textContent = message;
-    field.setAttribute("aria-invalid", String(message !== ""));
-}
-
-// Check every field before showing success and keep the user's entries.
-function validateContactForm(event) {
-    event.preventDefault();
-
-    const nameField = document.getElementById("name");
-    const emailField = document.getElementById("email");
-    const subjectField = document.getElementById("subject");
-    const messageField = document.getElementById("message");
-    const status = document.getElementById("form-status");
-
-    status.textContent = "";
-
-    const name = nameField.value.trim();
-    const email = emailField.value.trim();
-    const subject = subjectField.value.trim();
-    const message = messageField.value.trim();
-
-    let emailError = "";
-
-    if (email === "") {
-        emailError = "Please enter your email address.";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        emailError = "Please enter an email like name@example.com.";
+    if (themeButton) {
+        themeButton.addEventListener("click", function () {
+            settings.theme = settings.theme === "dark" ? "light" : "dark";
+            applyTheme(settings.theme === "dark");
+            saveSettings();
+        });
     }
 
-    showFieldError(
-        nameField,
-        name === "" ? "Please enter your name." : ""
-    );
+    if (skillsList) {
+        const validSkills = skills.filter(function (skill) {
+            return skill.name.trim() !== "";
+        });
 
-    showFieldError(emailField, emailError);
+        skillsList.replaceChildren();
 
-    showFieldError(
-        subjectField,
-        subject === "" ? "Please enter a subject." : ""
-    );
+        if (validSkills.length === 0) {
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
 
-    showFieldError(
-        messageField,
-        message === "" ? "Please enter a message." : ""
-    );
+            cell.colSpan = 3;
+            cell.textContent = "No skills to display.";
 
-    const firstInvalid = contactForm.querySelector(
-        '[aria-invalid="true"]'
-    );
+            row.appendChild(cell);
+            skillsList.appendChild(row);
+        } else {
+            validSkills.forEach(function (skill) {
+                const row = document.createElement("tr");
+                const nameCell = document.createElement("td");
+                const categoryCell = document.createElement("td");
+                const levelCell = document.createElement("td");
 
-    if (firstInvalid) {
-        firstInvalid.focus();
-        return;
+                nameCell.textContent = skill.name;
+                categoryCell.textContent = skill.category;
+                levelCell.textContent = skill.level;
+
+                row.append(nameCell, categoryCell, levelCell);
+                skillsList.appendChild(row);
+            });
+        }
     }
 
-    status.textContent =
-        "Form checked successfully. No message has been sent.";
-}
+    if (contactForm) {
+        const nameField = document.getElementById("name");
+        const emailField = document.getElementById("email");
+        const subjectField = document.getElementById("subject");
+        const messageField = document.getElementById("message");
+        const formStatus = document.getElementById("form-status");
 
-if (contactForm) {
-    contactForm.addEventListener("submit", validateContactForm);
-    contactForm.noValidate = true;
-}
+        contactForm.noValidate = true;
+        nameField.value = settings.visitorName;
+
+        function showFieldError(field, message) {
+            const errorMessage = document.getElementById(`${field.id}-error`);
+
+            errorMessage.textContent = message;
+            field.setAttribute("aria-invalid", String(message !== ""));
+        }
+
+        nameField.addEventListener("input", function () {
+            settings.visitorName = nameField.value;
+            saveSettings();
+        });
+
+        contactForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            formStatus.textContent = "";
+
+            const name = nameField.value.trim();
+            const email = emailField.value.trim();
+            const subject = subjectField.value.trim();
+            const message = messageField.value.trim();
+
+            let emailError = "";
+
+            if (email === "") {
+                emailError = "Please enter your email address.";
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                emailError = "Please enter an email like name@example.com.";
+            }
+
+            showFieldError(
+                nameField,
+                name === "" ? "Please enter your name." : ""
+            );
+
+            showFieldError(emailField, emailError);
+
+            showFieldError(
+                subjectField,
+                subject === "" ? "Please enter a subject." : ""
+            );
+
+            showFieldError(
+                messageField,
+                message === "" ? "Please enter a message." : ""
+            );
+
+            const firstInvalid = contactForm.querySelector(
+                '[aria-invalid="true"]'
+            );
+
+            if (firstInvalid) {
+                firstInvalid.focus();
+                return;
+            }
+
+            formStatus.textContent =
+                "Form checked successfully. No message has been sent.";
+        });
+    }
+});
